@@ -1,0 +1,190 @@
+Partitioning: 
+Partitioning refers to the technique of dividing and organizing large datasets into smaller, more manageable subsets based on specific criteria. Partitioning is a fundamental concept in distributed data processing frameworks like Apache Hadoop and Apache Spark. It enables efficient data processing and parallelism across a cluster of machines.
+
+Benefits such as Data distribution,Parallel processing,Load balancing,Fault tolerance.
+
+Clustering:
+Clustering in the context of big data refers to the process of grouping similar data points together based on their intrinsic characteristics or patterns. It is a fundamental technique used for exploratory data analysis, data mining, and machine learning tasks in large-scale datasets. Clustering aims to identify natural structures or clusters in the data without any prior knowledge of the groupings.
+
+
+
+
+Bucketing :
+
+Bucketing is a technique used to group or categorize data based on specific criteria or ranges. It is commonly used in distributed data processing frameworks like Apache Hive and Apache Spark to optimize query performance and data organization.
+
+
+Topic:  Window Functions in SQL
+
+Rank in SQL:
+
+The Rank() function assigns a unique rank to each row based on the specified ordering criteria. If there are ties, the Rank() function will assign the same rank to rows with the same values, but the next rank is then skipped. For example, both Emma and Sarah have a score of 88 and share rank 2. The next rank is 3 instead of 4.
+
+
+
+Example:
+SELECT StudentID, Name, Score,
+       RANK() OVER (ORDER BY Score DESC) AS rank,
+FROM Students;
+
+
+
+
+Dense_rank in SQL:
+
+ The Dense_Rank() function also assigns a unique rank to each row based on the specified ordering criteria. However, it handles ties differently. The Dense_Rank() function does not skip ranks when there are ties. Instead, it assigns consecutive ranks without gaps. In the example, both Emma and Sarah have a score of 88 and are assigned the same dense rank of 2. The next rank is 3, and there are no skipped ranks.
+
+Example:
+SELECT StudentID, Name, Score,
+       DENSE_RANK() OVER (ORDER BY Score DESC) AS dense_rank
+FROM Students;
+
+In summary, the Rank() function assigns unique ranks but may have skipped ranks when there are ties. On the other hand, the Dense_Rank() function assigns unique ranks without any gaps, ensuring consecutive ranks even when there are ties.
+
+
+Functions in SQL:
+SQL provides various built-in functions that allow you to perform calculations, manipulate data, and retrieve specific information from the database. Here are some commonly used categories of functions in SQL:
+
+
+1) Aggregate Functions: These functions perform calculations on a set of values and return a single result. Examples include:
+
+SUM(): Calculates the sum of values in a column or expression.
+AVG(): Calculates the average of values in a column or expression.
+COUNT(): Counts the number of rows or non-null values in a column.
+MAX(): Retrieves the maximum value from a column or expression.
+MIN(): Retrieves the minimum value from a column or expression.
+
+2) String Functions: These functions operate on string values and allow you to manipulate or extract information from them. Examples include:
+
+CONCAT(): Concatenates two or more strings together.
+LENGTH(): Returns the length of a string.
+UPPER(): Converts a string to uppercase.
+LOWER(): Converts a string to lowercase.
+SUBSTRING(): Extracts a substring from a string based on specified positions.
+
+
+
+3) Date and Time Functions: These functions handle date and time values and enable you to perform various operations on them. Examples include:
+
+CURRENT_DATE: Retrieves the current date.
+CURRENT_TIME: Retrieves the current time.
+DATEPART(): Extracts a specific part (e.g., year, month, day) from a date or time.
+DATEADD(): Adds or subtracts a specific time interval from a date or time.
+DATEDIFF(): Calculates the difference between two dates or times.
+
+4) Conversion Functions: These functions allow you to convert values from one data type to another. Examples include:
+
+CAST(): Converts a value to a specified data type.
+CONVERT(): Converts a value to a specified data type based on a specific format.
+
+5) Logical Functions: These functions evaluate logical conditions and return a Boolean result (true or false). Examples include:
+
+IF(): Returns one value if a condition is true and another value if the condition is false.
+CASE: Evaluates multiple conditions and returns a result based on the first matching condition.
+
+
+WINDOW FUNCTIONS IN SQL:
+
+Lead In SQL:
+
+ LEAD() function is a window function that allows you to access the value of a subsequent row in a result set. It is commonly used to retrieve the value of the next row based on a specified order within a partition. The LEAD() function is useful for calculating the difference or change between consecutive rows or for accessing the next value for further analysis or comparison.
+
+The syntax for the LEAD() function is as follows:
+LEAD(expression, offset, default) OVER (PARTITION BY partition_expression ORDER BY sort_expression)
+
+
+In SQL, the LEAD() function is a window function that allows you to access the value of a subsequent row in a result set. It is commonly used to retrieve the value of the next row based on a specified order within a partition. The LEAD() function is useful for calculating the difference or change between consecutive rows or for accessing the next value for further analysis or comparison.
+
+The syntax for the LEAD() function is as follows:
+
+LEAD(expression, offset, default) OVER (PARTITION BY partition_expression ORDER BY sort_expression)
+
+Let's break down the components of the LEAD() function:
+expression: It represents the column or expression from which you want to retrieve the next value.
+offset: It specifies the number of rows ahead from the current row to access. The default is 1, which retrieves the immediate next row.
+default: It is an optional parameter that specifies the value to return if the next row is not available (e.g., when the current row is the last row in the partition).
+PARTITION BY: This clause is optional and is used to divide the result set into partitions based on one or more columns. The LEAD() function operates separately on each partition.
+ORDER BY: This clause determines the order in which the rows are processed within each partition. It specifies the column(s) based on which the LEAD() function determines the subsequent row.
+
+Here's an example to illustrate the usage of the LEAD() function:
+Consider a table called "Sales" with the columns "Product", "Month", and "Revenue". We want to calculate the difference in revenue between each month and the subsequent month for each product.
+
+SELECT Product, Month, Revenue,
+       LEAD(Revenue, 1, 0) OVER (PARTITION BY Product ORDER BY Month) AS NextMonthRevenue,
+       LEAD(Revenue, 1, 0) OVER (PARTITION BY Product ORDER BY Month) - Revenue AS RevenueDifference
+FROM Sales;
+
+Lag() In SQL:
+In SQL, the LAG() function is a window function that allows you to access the value of a previous row in a result set. It is similar to the LEAD() function, but instead of accessing the next row, it retrieves the value of a preceding row based on a specified order within a partition. The LAG() function is useful for calculating the difference or change between consecutive rows or for accessing the previous value for further analysis or comparison.
+The syntax for the LAG() function is as follows:
+
+LAG(expression, offset, default) OVER (PARTITION BY partition_expression ORDER BY sort_expression)
+
+In this example:
+
+Product, Month, Revenue: These are the columns we want to retrieve from the "Sales" table.
+LAG(Revenue, 1, 0) OVER (PARTITION BY Product ORDER BY Month) AS PreviousMonthRevenue: This part retrieves the revenue of the previous month for each product by using the LAG() function. It considers the "Revenue" column, looks one row back (offset 1), and if the previous row is not available, it returns 0 as the default value.
+Revenue - LAG(Revenue, 1, 0) OVER (PARTITION BY Product ORDER BY Month) AS RevenueDifference: This calculates the difference between the revenue of the current month and the revenue of the previous month for each product.
+The result of the query will include the selected columns, along with the revenue of the previous month and the revenue difference for each product.
+
+The LAG() function allows you to access preceding rows and perform calculations or comparisons with the values in those rows, providing valuable insights into the relationship between consecutive rows within a partition.
+
+ROW_NUMBER() function: The ROW_NUMBER() function is a window function that assigns a unique row number to each row within a result set. It can be used to generate a sequential numbering for rows based on a specified ordering. The ROW_NUMBER() function is often used in combination with other window functions to perform complex analytical queries.
+
+The syntax for the ROW_NUMBER() function is as follows:
+
+ROW_NUMBER() OVER (ORDER BY sort_expression [DESC])
+
+Here's an example to illustrate the usage of the ROW_NUMBER() function:
+
+Consider a table called "Employees" with the columns "EmployeeID", "Name", and "Department". We want to assign a row number to each employee based on their employee ID in ascending order.
+
+SELECT EmployeeID, Name, Department,
+       ROW_NUMBER() OVER (ORDER BY EmployeeID) AS RowNumber
+FROM Employees;
+
+SLOWLY  CHANGING DIMENSIONS (SCD):
+
+SCD stands for Slowly Changing Dimensions, which refers to the technique used in data warehousing to handle changes in dimensional data over time. It provides a way to track historical changes in the data and maintain a historical view of the data over different points in time. There are three main types of SCD:
+
+Type 1 SCD:
+
+In Type 1 SCD, the old data is simply overwritten with the new data. There is no tracking of historical changes, and the current values replace the previous values.
+This approach is suitable when historical data is not required, and only the most recent value is important.
+It is simple and doesn't require additional storage, but it loses the ability to analyze historical trends.
+Example: Let's say a customer changes their phone number. In Type 1 SCD, the existing customer record would be updated directly with the new phone number, overwriting the previous value. This approach means that only the most recent phone number would be stored, and there would be no historical tracking of changes. This is suitable if the company is only interested in the most up-to-date information and doesn't need a historical perspective.
+
+
+Type 2 SCD:
+
+Type 2 SCD tracks historical changes by creating new rows for each change in the dimension data. It maintains a complete history of changes over time.
+New records are inserted into the dimension table, each with a unique identifier (e.g., surrogate key) and effective dates to specify the time period for which the record is valid.
+This approach allows for analyzing historical trends and maintaining a full history, but it requires additional storage and complicates queries as they need to handle multiple records for the same entity.
+Example: Now, consider a situation where a customer moves to a new address. In Type 2 SCD, a new record would be inserted into the customer dimension table, capturing the updated address along with the effective start date and end date of the record. The previous address would still be retained, and a new surrogate key would be assigned to the new record. This allows for historical analysis and tracking changes over time.
+
+
+Type 3 SCD:
+
+Type 3 SCD maintains a limited history by adding attributes or columns to the dimension table to store the most recent change and, in some cases, a previous value.
+This approach typically includes dedicated columns for capturing the most recent change, and possibly additional columns to store the previous value.
+Type 3 SCD allows for limited historical analysis and provides a balance between storage requirements and historical tracking. However, it is not suitable for scenarios that require a comprehensive history of changes.
+Example: Let's assume the customer's marital status changes. In Type 3 SCD, additional columns would be added to the customer dimension table to store the current marital status and the previous marital status. This approach allows for limited historical analysis, as the previous marital status can be easily accessed. However, it does not capture a comprehensive history of changes like Type 2 SCD.
+
+
+
+
+Type 4 SCD:
+Type 4 SCD, also known as the "historical table" approach, involves creating a separate table to store historical changes while maintaining a current value in the main dimension table. This approach allows for efficient querying of current data while preserving historical information.
+
+Example: The main dimension table (e.g., "Customer") contains the current values of the dimension attributes.
+A related historical table (e.g., "Customer_History") stores the previous values of the dimension attributes along with relevant effective dates.
+When a change occurs in a dimension attribute, a new record is inserted into the historical table, capturing the old values and the effective date range for which they were valid.
+The current value in the main dimension table is updated to reflect the new value.
+
+
+Type 6 SCD:  
+Type 6 SCD, also known as the "hybrid approach," combines elements of Type 1, Type 2, and Type 3 SCD. It aims to capture both current and historical values while also tracking changes in a limited manner.
+
+The main dimension table includes columns to store the current value as well as previous values.
+Additional columns, such as flags or indicators, are added to track the type of change and the effective date of the change. When a change occurs, the current value is updated, and the previous value is stored in separate columns along with the change type and effective date.
+Historical changes are stored alongside the current values, allowing for limited historical analysis.
