@@ -1,0 +1,81 @@
+Topic:  Different File formats in Big Data Environment:
+
+CSV (Comma-Separated Values):
+CSV is a simple and widely used file format for storing structured data. It represents tabular data in plain text, with each row representing a record and each column representing a field or attribute. CSV files are human-readable and can be easily generated and consumed by many applications, making them highly interoperable. However, CSV files do not support data types or complex data structures.
+Example:
+Consider a CSV file containing sales data with columns such as "Product ID," "Product Name," "Price," and "Quantity." Each row represents the sales information for a specific product.
+
+Product ID,Product Name,Price,Quantity
+1,Product A,10.99,100
+2,Product B,5.99,200
+3,Product C,8.49,150
+
+
+JSON (JavaScript Object Notation):
+JSON is a widely adopted file format for storing and exchanging structured data. It represents data in a hierarchical format using key-value pairs and supports various data types such as numbers, strings, arrays, and objects. JSON files are human-readable and are commonly used in web applications and RESTful APIs. They allow for flexible data representation and support complex nested structures.
+Example:
+A JSON file storing customer information with attributes such as "Name," "Age," and "Address" for each customer.
+[
+  {
+    "Name": "John Smith",
+    "Age": 30,
+    "Address": "123 Main St"
+  },
+  {
+    "Name": "Jane Doe",
+    "Age": 25,
+    "Address": "456 Elm St"
+  }
+]
+
+Parquet:
+Parquet is a columnar storage file format optimized for big data processing frameworks like Apache Hadoop and Apache Spark. It organizes data into columns, allowing for efficient compression, predicate pushdown, and column pruning. Parquet files are highly suitable for analytical workloads where selective access to specific columns is required. They offer high performance and compression ratios, especially for large datasets.
+Example:
+A Parquet file containing sales data with columns like "Product ID," "Product Name," "Price," and "Quantity" organized in a columnar format.
+
+----------------------------------
+| Product ID | Product Name | ... |
+----------------------------------
+| 1          | Product A    | ... |
+| 2          | Product B    | ... |
+| 3          | Product C    | ... |
+----------------------------------
+
+Avro:
+Avro is a compact and efficient file format that provides data serialization and schema evolution capabilities. It supports complex data structures, schema evolution, and dynamic typing. Avro files contain both the data and the schema, making them self-describing. They are commonly used in Apache Kafka and Apache Hadoop ecosystems for data integration and exchange.
+Example:
+An Avro file storing employee records with fields such as "ID," "Name," "Department," and "Salary" along with the associated schema.
+
+{
+  "type": "record",
+  "name": "Employee",
+  "fields": [
+    {"name": "ID", "type": "int"},
+    {"name": "Name", "type": "string"},
+    {"name": "Department", "type": "string"},
+    {"name": "Salary", "type": "float"}
+  ]
+}
+
+
+
+ORC (Optimized Row Columnar): 
+ORC is a file format designed for efficient big data processing in frameworks like Apache Hive and Apache Spark. It provides optimized storage and retrieval of structured data, enabling faster query performance and reduced storage requirements. Let's dive into a detailed explanation of ORC using an example.
+
+Consider a dataset containing sales information for an e-commerce company. The dataset includes columns such as "Order ID," "Customer ID," "Product ID," "Quantity," "Price," and "Timestamp." Each row represents a single transaction.
+
+ORC File: sales.orc
+
+Column 1: OrderID
+--------------------------------
+| 1001 |
+| 1002 |
+| 1003 |
+--------------------------------
+
+Column 2: CustomerID
+--------------------------------
+| 2001 |
+| 2002 |
+| 2003 |
+--------------------------------
